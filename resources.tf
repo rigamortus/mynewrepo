@@ -31,14 +31,15 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
 data "aws_iam_policy_document" "allow_pub_access" {
   statement {
     principals {
-      type        = "*"
+      type        = "AWS"
       identifiers = ["*"]
     }
 
     actions = [
-      "s3:PutBucketPolicy",
       "s3:GetObject"
     ]
+
+    effect = "Allow"
 
     resources = [
       aws_s3_bucket.mys3.arn,
