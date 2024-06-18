@@ -61,7 +61,7 @@
         });
 
         function generateQRCode(url) {
-            fetch('https://s669x0n8n3.execute-api.us-east-1.amazonaws.com/stage1/qr-code', {
+            fetch('$myapi/qr-code', {
                 method: 'POST',
                 body: JSON.stringify({ url: url }),
                 headers: {
