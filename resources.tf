@@ -23,6 +23,30 @@ resource "aws_s3_bucket" "mys3" {
   }
 }
 
+resource "aws_s3_bucket_policy" "allow_public_access" {
+  bucket = aws_s3_bucket.mys3.id
+  policy = data.aws_iam_policy_document.allow_pub_access.json
+}
+
+data "aws_iam_policy_document" "allow_pub_access" {
+  statement {
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "s3:GetObject",
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      aws_s3_bucket.example.arn,
+      "${aws_s3_bucket.mys3.arn}/*",
+    ]
+  }
+}
+
 resource "aws_s3_bucket_ownership_controls" "ownership" {
   bucket = aws_s3_bucket.mys3.id
   rule {
