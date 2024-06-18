@@ -36,8 +36,8 @@ data "aws_iam_policy_document" "allow_pub_access" {
     }
 
     actions = [
-      "s3:GetObject",
-      "s3:ListBucket",
+      "s3:PutBucketPolicy",
+      "s3:GetObject"
     ]
 
     resources = [
