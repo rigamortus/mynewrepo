@@ -61,7 +61,7 @@
         });
 
         function generateQRCode(url) {
-            fetch('$myapi/qr-code', {
+            fetch('myapi/qr-code', {
                 method: 'POST',
                 body: JSON.stringify({ url: url }),
                 headers: {
