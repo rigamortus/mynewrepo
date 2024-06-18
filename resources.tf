@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "allow_pub_access" {
 
     resources = [
       aws_s3_bucket.mys3.arn,
-      "${aws_s3_bucket.mys3.arn}/*",
+      "${aws_s3_bucket.mys3.arn}/*"
     ]
   }
 }
