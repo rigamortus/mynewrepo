@@ -7,11 +7,8 @@ terraform {
   }
 }
 
-# Configure the AWS Provider
 provider "aws" {
   region = "us-east-1"
-  #shared_credentials_files = ["~/.aws/credentials"]
-  #profile                  = "default"
 }
 
 resource "aws_s3_bucket" "mys3" {
@@ -74,7 +71,6 @@ resource "aws_s3_bucket_acl" "rigaacl" {
   acl    = "public-read"
 }
 
-# Lambda function
 resource "aws_lambda_function" "my_lambda" {
   function_name    = "myqrcodegenerator"
   handler          = "lambda_function.lambda_handler"
@@ -85,8 +81,7 @@ resource "aws_lambda_function" "my_lambda" {
   s3_bucket        = aws_s3_bucket.mys3.id
   s3_key           = aws_s3_bucket_object.mylambda_zip.key
 
-  # Use an existing IAM role
-  role = "arn:aws:iam::975049925614:role/service-role/python2-role-6z6ifmb5" # Change this to your existing IAM role ARN
+  role = "arn:aws:iam::975049925614:role/service-role/python2-role-6z6ifmb5"
 
   environment {
     variables = {
@@ -101,7 +96,6 @@ resource "aws_s3_bucket_object" "mylambda_zip" {
   source       = "${path.module}/qr.zip"
   etag         = filemd5("${path.module}/qr.zip")
   content_type = "application/zip"
-  #   acl          = "public-read"
 }
 
 resource "aws_api_gateway_rest_api" "api" {
@@ -166,9 +160,9 @@ resource "aws_api_gateway_integration_response" "response_200" {
     "application/json" = "#set($origin = $input.params().header.get('Origin'))\n#if($origin)\n  #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin)\n#end\n{}"
   }
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'",
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'"
   }
   depends_on = [aws_api_gateway_integration.lambda_integration]
 }
@@ -179,6 +173,7 @@ resource "aws_api_gateway_method" "options_method" {
   http_method   = "OPTIONS"
   authorization = "NONE"
 }
+
 resource "aws_api_gateway_method_response" "options_200" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   resource_id = aws_api_gateway_resource.qr_code_resource.id
@@ -188,22 +183,25 @@ resource "aws_api_gateway_method_response" "options_200" {
     "application/json" = "Empty"
   }
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Origin"  = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Headers" = true
   }
   depends_on = [aws_api_gateway_method.options_method]
 }
+
 resource "aws_api_gateway_integration" "options_integration" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.qr_code_resource.id
   http_method             = aws_api_gateway_method.options_method.http_method
   type                    = "MOCK"
-  depends_on              = [aws_api_gateway_method.options_method]
   integration_http_method = "POST"
-
-   request_templates = {
+  request_templates = {
     "application/json" = "{\"statusCode\": 200}"
   }
+  depends_on  = [aws_api_gateway_method.options_method]
 }
+
 resource "aws_api_gateway_integration_response" "options_integration_response" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   resource_id = aws_api_gateway_resource.qr_code_resource.id
@@ -227,5 +225,6 @@ resource "aws_api_gateway_deployment" "deployment" {
 output "api_url" {
   value = aws_api_gateway_deployment.deployment.invoke_url
 }
+
 
 
