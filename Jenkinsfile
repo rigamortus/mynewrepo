@@ -56,7 +56,7 @@ pipeline {
             steps {
                 // Serve HTML file using Python's SimpleHTTPServer
                 sh 'api_url=$(terraform output -raw api_url)'
-                sh 'cd sed -i "s|myapi|$api_url|g" /home/ubuntu/webserver/index.html'
+                sh 'sed -i "s|myapi|$api_url|g" /home/ubuntu/webserver/index.html'
                 sh 'nohup python3 -m http.server 5050 > /dev/null 2>&1 &'
             }
         }
