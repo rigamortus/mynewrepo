@@ -447,7 +447,7 @@ An HTML file was created using basic HTML and minimal styling (Javascript). The 
 
 ## Step 4: Jenkins CI
 
-A Jenkins server was created using a t2.medium Ubuntu 22.04 instance (2vCPU and 16GB EBS disk). Steps for installing jenkins can be found [here](https://www.digitalocean.com/community/tutorials/how-to-install-jenkins-on-ubuntu-20-04). Jenkins allows developers to build, test, and automate their workflows. The Jenkinsfile used for the task is outlined below:
+A Jenkins server was created using a t2.medium Ubuntu 22.04 instance (2vCPU and 16GB EBS disk). Steps for installing Jenkins can be found [here](https://www.digitalocean.com/community/tutorials/how-to-install-jenkins-on-ubuntu-20-04). Jenkins allows developers to build, test, and automate their workflows. The Jenkinsfile used for the task is outlined below:
 
 ```Groovy
 pipeline {
