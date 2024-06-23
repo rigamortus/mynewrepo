@@ -1,20 +1,19 @@
 # Serverless QR Code Generator Using API Gateway Integration With Lambda and S3
 
-The aim of this project was to create a serveless static website that generates QR code images for users once they enter the domain name (DNS) is provided. To achieve this, three "serverless" AWS services were employed:
+The aim of this project was to create a serveless static website that generates QR code images for users once the fully qualified domain name (DNS) is provided. To achieve this, three "serverless" AWS services were employed:
 
 - API Gateway
 - Amazon S3
 - AWS Lambda
 
-This services were provisioned using a Jenkins CI Server that pulls the Terraform (IAC) file from the remote GitHub repository and automates the infrastructure.
+These services were provisioned using a Jenkins CI Server that pulls the Terraform (IAC) file from the remote GitHub repository and automates the infrastructure.
 
 ## Step 1: Creating the Lambda Function
-A Python script was created to this effect. It processess incoming HTTP requests, parses the supplied URL and generates a QR code image as a response. The lambda function was packaged az a zip file (__qr.zip__) and uploaded to an S3 bucket. To create the package, a python virtual environment was created:
+A Python script was created to this effect. It processess incoming HTTP requests, parses the supplied URL and generates a QR code image as a response. The lambda function was packaged as a zip file (__qr.zip__) and uploaded to an S3 bucket. To create the package, a python virtual environment was created:
 
 
 ### (i) Create a project directory
 ```bash
-
 #!/bin/bash
 mkdir qr/
 cd qr/
@@ -38,7 +37,6 @@ Code for the Lambda function was written to the file __lambda_function.py__:
 
 ```python
 #!/usr/bin/env python3
-
 import json
 import boto3
 import qrcode
@@ -527,7 +525,7 @@ git remote add origin https://github.com/rigamortus/mynewrepo.git
 All configurations files were pushed to the main branch after committing them:
 
 ```bash
-git push -u origin main
+git push -u origin master
 ```
 
 ## Step 6: Pipeline Implementation
@@ -554,7 +552,7 @@ __S3__:
 __Final Result__:
 ![final](images/6-final.png)
 
-__NOTE__: Ensure ports 8080, 5050, and 22 are opened on the security group attached to teh EC2 Jenkins server.
+__NOTE__: Ensure ports 8080, 5050, and 22 are opened on the security group attached to the EC2 Jenkins server.
 
 
 
