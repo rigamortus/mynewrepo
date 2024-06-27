@@ -100,7 +100,7 @@ zip -r9 qr.zip .
 ```
 ## Step 2: Terraform Scripts
 
-Terraform was used to define the serverless infrastructure. This include uploading the __qr.zip__ file to a provisioned S3 bucket, creating a lambda function (__myqrcodegenerator), and an edge-type Rest API Gateway (__QR CODE__).
+Terraform was used to define the serverless infrastructure. This include uploading the __qr.zip__ file to a provisioned S3 bucket, creating a lambda function (__myqrcodegenerator__), and an edge-type Rest API Gateway (__QR CODE__).
 
 ## __resources.tf__
 
